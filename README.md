@@ -42,13 +42,13 @@ Install the following before starting:
 Clone the repository:
 
 ```bash
-git clone YOUR_BACKEND_REPOSITORY_URL
+git clone repo link
 ```
 
 Open the backend directory:
 
 ```bash
-cd YOUR_BACKEND_FOLDER
+cd Folder name 
 ```
 
 Install dependencies:
@@ -69,22 +69,6 @@ backend/
 └── README.md
 ```
 
-Add the following variables to `.env`:
-
-```env
-DB=mongodb+srv://DATABASE_USERNAME:DATABASE_PASSWORD@YOUR_CLUSTER.mongodb.net/propertist?retryWrites=true&w=majority
-
-PORT=4000
-
-JWT_SECRET=replace-with-a-long-random-secret
-
-AWS_ACCESS_KEY_ID=replace-with-your-access-key
-AWS_SECRET_ACCESS_KEY=replace-with-your-secret-key
-AWS_BUCKET=replace-with-your-bucket-name
-AWS_REGION=ap-south-1
-```
-
-Do not commit the `.env` file.
 
 ## Sample environment file
 
