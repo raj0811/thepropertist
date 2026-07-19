@@ -401,15 +401,10 @@ export class PropertiesService {
 
                 filter.status = normalizedStatus;
             } else {
-                // Public listing defaults to available properties
+
                 filter.status = PropertyStatus.AVAILABLE;
             }
 
-            /*
-             * BHK filter
-             *
-             * bhk=2 becomes configuration="2BHK"
-             */
             if (bhk !== undefined) {
                 const bhkNumber = Number(bhk);
 
@@ -426,9 +421,6 @@ export class PropertiesService {
                 filter.configuration = `${bhkNumber}BHK`;
             }
 
-            /*
-             * Price range filter
-             */
             if (
                 minPrice !== undefined ||
                 maxPrice !== undefined
@@ -456,9 +448,7 @@ export class PropertiesService {
                 }
             }
 
-            /*
-             * Rent, sell or lease filter
-             */
+
             if (listingType) {
                 const normalizedListingType =
                     listingType.toUpperCase();
@@ -476,9 +466,7 @@ export class PropertiesService {
                 filter.listingType = normalizedListingType;
             }
 
-            /*
-             * Search by city, address, state or pincode
-             */
+
             if (location?.trim()) {
                 const escapedLocation = location
                     .trim()
