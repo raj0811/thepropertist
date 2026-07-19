@@ -14,7 +14,6 @@ export class AgentAuthGuard implements CanActivate {
         const request: any = context.switchToHttp().getRequest<Request>();
 
         const authHeader = request.headers.authorization;
-        console.log("AUTH HEADER:", authHeader);
 
         if (!authHeader) {
             console.log("NO AUTH HEADER");
@@ -22,12 +21,8 @@ export class AgentAuthGuard implements CanActivate {
         }
 
         const token = authHeader.split(' ')[1];
-        console.log("TOKEN:", token);
-
         try {
             const validateToken = await this.agentService.verifyAgentToken(token);
-            console.log("VALID TOKEN:", validateToken);
-
             request.user = validateToken;
 
             console.log("GUARD PASS");

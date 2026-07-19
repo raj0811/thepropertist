@@ -117,15 +117,8 @@ export class PropertiesController {
             );
         }
 
-        /*
-         * Supports both formats:
-         *
-         * data:image/jpeg;base64,/9j/4AAQ...
-         *
-         * or raw Base64:
-         *
-         * /9j/4AAQ...
-         */
+        console.log(body.base64);
+
         const dataUrlMatch = body.base64.match(
             /^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/,
         );
@@ -196,7 +189,7 @@ export class PropertiesController {
             `properties/${req.user.id}/` +
             `${randomUUID()}.${extension}`;
 
-        const bucketName = process.env.AWS_S3_BUCKET_NAME;
+        const bucketName = process.env.AWS_S3_BUCKET_NAME || 'properties-dklasjdalk';
 
         if (!bucketName) {
             throw new BadRequestException(
@@ -221,6 +214,8 @@ export class PropertiesController {
             },
         };
     }
+
+
 
     @Get('agent-properties')
     @UseGuards(AgentAuthGuard)

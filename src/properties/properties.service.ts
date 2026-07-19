@@ -148,6 +148,9 @@ export class PropertiesService {
             if (!Types.ObjectId.isValid(agentMongoId)) {
                 throw new BadRequestException("Invalid agent ID");
             }
+            console.log({
+                propertyId, agentMongoId
+            });
 
             const property =
                 await this.databaseService.propertyModel.findOne({

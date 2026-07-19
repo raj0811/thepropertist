@@ -59,8 +59,6 @@ export class PropertyAddress {
   })
   city: string;
 
-
-
   @Prop({
     type: String,
     required: [true, "State is required"],

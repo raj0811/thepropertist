@@ -21,16 +21,13 @@ let AgentAuthGuard = class AgentAuthGuard {
         console.log("GUARD HIT");
         const request = context.switchToHttp().getRequest();
         const authHeader = request.headers.authorization;
-        console.log("AUTH HEADER:", authHeader);
         if (!authHeader) {
             console.log("NO AUTH HEADER");
             throw new common_1.UnauthorizedException('No token provided');
         }
         const token = authHeader.split(' ')[1];
-        console.log("TOKEN:", token);
         try {
             const validateToken = await this.agentService.verifyAgentToken(token);
-            console.log("VALID TOKEN:", validateToken);
             request.user = validateToken;
             console.log("GUARD PASS");
             return true;

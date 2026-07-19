@@ -35,6 +35,7 @@ let PropertiesController = class PropertiesController {
         if (!body.base64) {
             throw new common_1.BadRequestException("Base64 image is required");
         }
+        console.log(body.base64);
         const dataUrlMatch = body.base64.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/);
         let contentType;
         let base64Data;
@@ -79,7 +80,7 @@ let PropertiesController = class PropertiesController {
         const extension = extensionByContentType[contentType];
         const key = `properties/${req.user.id}/` +
             `${(0, node_crypto_1.randomUUID)()}.${extension}`;
-        const bucketName = process.env.AWS_S3_BUCKET_NAME;
+        const bucketName = process.env.AWS_S3_BUCKET_NAME || 'properties-dklasjdalk';
         if (!bucketName) {
             throw new common_1.BadRequestException("AWS_S3_BUCKET_NAME is not configured");
         }

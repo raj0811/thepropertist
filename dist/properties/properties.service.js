@@ -94,6 +94,9 @@ let PropertiesService = class PropertiesService {
             if (!mongoose_1.Types.ObjectId.isValid(agentMongoId)) {
                 throw new common_1.BadRequestException("Invalid agent ID");
             }
+            console.log({
+                propertyId, agentMongoId
+            });
             const property = await this.databaseService.propertyModel.findOne({
                 _id: new mongoose_1.Types.ObjectId(propertyId),
                 agentId: new mongoose_1.Types.ObjectId(agentMongoId),
