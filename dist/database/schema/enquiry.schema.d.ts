@@ -23,6 +23,7 @@ export declare class Enquiry {
     email: string;
     phone: string;
     propertyMongoId?: Types.ObjectId | null;
+    propertyId?: string | null;
     agentId?: Types.ObjectId | null;
     budget?: number | null;
     preferredArea?: string | null;
@@ -89,6 +90,15 @@ export declare const EnquirySchema: MongooseSchema<Enquiry, import("mongoose").M
         id: string;
     }> | undefined;
     propertyMongoId?: import("mongoose").SchemaDefinitionProperty<Types.ObjectId | null | undefined, Enquiry, import("mongoose").Document<unknown, {}, Enquiry, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Enquiry & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    propertyId?: import("mongoose").SchemaDefinitionProperty<string | null | undefined, Enquiry, import("mongoose").Document<unknown, {}, Enquiry, {
         id: string;
     }, import("mongoose").DefaultSchemaOptions> & Omit<Enquiry & {
         _id: Types.ObjectId;

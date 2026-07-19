@@ -40,6 +40,7 @@ let Enquiry = class Enquiry {
     email;
     phone;
     propertyMongoId;
+    propertyId;
     agentId;
     budget;
     preferredArea;
@@ -113,6 +114,14 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], Enquiry.prototype, "propertyMongoId", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({
+        type: String,
+        index: true,
+        default: null,
+    }),
+    __metadata("design:type", Object)
+], Enquiry.prototype, "propertyId", void 0);
 __decorate([
     (0, mongoose_1.Prop)({
         type: mongoose_2.Schema.Types.ObjectId,

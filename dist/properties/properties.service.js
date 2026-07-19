@@ -371,26 +371,40 @@ let PropertiesService = class PropertiesService {
         }
     }
     async deleteProperty(propertyId, agentId) {
+        if (!mongoose_1.Types.ObjectId.isValid(propertyId)) {
+            throw new common_1.BadRequestException("Invalid property ID");
+        }
+        if (!mongoose_1.Types.ObjectId.isValid(agentId)) {
+            throw new common_1.BadRequestException("Invalid agent ID");
+        }
+        const propertyObjectId = new mongoose_1.Types.ObjectId(propertyId);
+        const agentObjectId = new mongoose_1.Types.ObjectId(agentId);
+        const session = await this.databaseService.propertyModel.db.startSession();
         try {
-            if (!mongoose_1.Types.ObjectId.isValid(propertyId)) {
-                throw new common_1.BadRequestException("Invalid property ID");
-            }
-            if (!mongoose_1.Types.ObjectId.isValid(agentId)) {
-                throw new common_1.BadRequestException("Invalid agent ID");
-            }
-            const property = await this.databaseService.propertyModel
-                .findOneAndDelete({
-                _id: new mongoose_1.Types.ObjectId(propertyId),
-                agentId: new mongoose_1.Types.ObjectId(agentId),
-            })
-                .lean();
-            if (!property) {
-                throw new common_1.NotFoundException("Property not found or you are not authorized to delete it");
-            }
+            let deletedProperty;
+            await session.withTransaction(async () => {
+                deletedProperty =
+                    await this.databaseService.propertyModel
+                        .findOneAndDelete({
+                        _id: propertyObjectId,
+                        agentId: agentObjectId,
+                    }, {
+                        session,
+                    })
+                        .lean();
+                if (!deletedProperty) {
+                    throw new common_1.NotFoundException("Property not found or you are not authorized to delete it");
+                }
+                await this.databaseService.enquiryModel.deleteMany({
+                    propertyMongoId: propertyObjectId,
+                }, {
+                    session,
+                });
+            });
             return {
                 success: true,
                 message: "Property deleted successfully",
-                data: property,
+                data: deletedProperty,
             };
         }
         catch (error) {
@@ -401,6 +415,9 @@ let PropertiesService = class PropertiesService {
                 throw new common_1.BadRequestException(error.message);
             }
             throw new common_1.BadRequestException("Unable to delete property");
+        }
+        finally {
+            await session.endSession();
         }
     }
 };

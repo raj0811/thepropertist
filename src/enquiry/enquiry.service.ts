@@ -77,20 +77,12 @@ export class EnquiryService {
                     await this.databaseService.enquiryModel.create({
                         name: name.trim(),
                         email: normalizedEmail,
-
-                        // Schema field is called phone
                         phone: normalizedPhone,
-
                         enquiryType:
                             EnquiryType.PROPERTY,
-
-                        // Internal MongoDB relationship
                         propertyMongoId:
                             property._id,
-
-                        // Automatically taken from property
                         agentId: property.agentId,
-
                         budget,
                         preferredArea:
                             preferredArea?.trim(),

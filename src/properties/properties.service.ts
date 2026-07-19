@@ -283,8 +283,6 @@ export class PropertiesService {
     }
 
 
-
-
     async getAgentProperties(
         agentId: string,
         page: number = 1,
@@ -586,41 +584,58 @@ export class PropertiesService {
         }
     }
 
-    async deleteProperty(
-        propertyId: string,
-        agentId: string,
-    ) {
+    async deleteProperty(propertyId: string, agentId: string) {
+        if (!Types.ObjectId.isValid(propertyId)) {
+            throw new BadRequestException("Invalid property ID");
+        }
+
+        if (!Types.ObjectId.isValid(agentId)) {
+            throw new BadRequestException("Invalid agent ID");
+        }
+
+        const propertyObjectId = new Types.ObjectId(propertyId);
+        const agentObjectId = new Types.ObjectId(agentId);
+
+        const session =
+            await this.databaseService.propertyModel.db.startSession();
+
         try {
-            if (!Types.ObjectId.isValid(propertyId)) {
-                throw new BadRequestException(
-                    "Invalid property ID",
-                );
-            }
+            let deletedProperty: any;
 
-            if (!Types.ObjectId.isValid(agentId)) {
-                throw new BadRequestException(
-                    "Invalid agent ID",
-                );
-            }
+            await session.withTransaction(async () => {
+                deletedProperty =
+                    await this.databaseService.propertyModel
+                        .findOneAndDelete(
+                            {
+                                _id: propertyObjectId,
+                                agentId: agentObjectId,
+                            },
+                            {
+                                session,
+                            },
+                        )
+                        .lean();
 
-            const property =
-                await this.databaseService.propertyModel
-                    .findOneAndDelete({
-                        _id: new Types.ObjectId(propertyId),
-                        agentId: new Types.ObjectId(agentId),
-                    })
-                    .lean();
+                if (!deletedProperty) {
+                    throw new NotFoundException(
+                        "Property not found or you are not authorized to delete it",
+                    );
+                }
 
-            if (!property) {
-                throw new NotFoundException(
-                    "Property not found or you are not authorized to delete it",
+                await this.databaseService.enquiryModel.deleteMany(
+                    {
+                        propertyMongoId: propertyObjectId,
+                    },
+                    {
+                        session,
+                    },
                 );
-            }
+            });
 
             return {
                 success: true,
                 message: "Property deleted successfully",
-                data: property,
+                data: deletedProperty,
             };
         } catch (error: unknown) {
             if (error instanceof HttpException) {
@@ -634,6 +649,8 @@ export class PropertiesService {
             throw new BadRequestException(
                 "Unable to delete property",
             );
+        } finally {
+            await session.endSession();
         }
     }
 

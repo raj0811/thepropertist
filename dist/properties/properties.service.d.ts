@@ -80,10 +80,6 @@ export declare class PropertiesService {
     deleteProperty(propertyId: string, agentId: string): Promise<{
         success: boolean;
         message: string;
-        data: import("src/database/schema/properties.schema").Property & {
-            _id: Types.ObjectId;
-        } & {
-            __v: number;
-        };
+        data: any;
     }>;
 }

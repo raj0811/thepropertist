@@ -94,6 +94,13 @@ export class Enquiry {
     })
     propertyMongoId?: Types.ObjectId | null;
 
+    @Prop({
+        type: String,
+        index: true,
+        default: null,
+    })
+    propertyId?: string | null;
+
 
     @Prop({
         type: MongooseSchema.Types.ObjectId,
