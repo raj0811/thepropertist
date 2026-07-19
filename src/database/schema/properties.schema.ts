@@ -14,6 +14,7 @@ export enum ListingType {
   RENT = "RENT",
   SELL = "SELL",
   LEASE = "LEASE",
+  NOT_SURE = "NOT_SURE"
 }
 
 export enum PropertyBenefit {

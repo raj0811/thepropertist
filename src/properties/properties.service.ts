@@ -595,5 +595,55 @@ export class PropertiesService {
         }
     }
 
+    async deleteProperty(
+        propertyId: string,
+        agentId: string,
+    ) {
+        try {
+            if (!Types.ObjectId.isValid(propertyId)) {
+                throw new BadRequestException(
+                    "Invalid property ID",
+                );
+            }
+
+            if (!Types.ObjectId.isValid(agentId)) {
+                throw new BadRequestException(
+                    "Invalid agent ID",
+                );
+            }
+
+            const property =
+                await this.databaseService.propertyModel
+                    .findOneAndDelete({
+                        _id: new Types.ObjectId(propertyId),
+                        agentId: new Types.ObjectId(agentId),
+                    })
+                    .lean();
+
+            if (!property) {
+                throw new NotFoundException(
+                    "Property not found or you are not authorized to delete it",
+                );
+            }
+
+            return {
+                success: true,
+                message: "Property deleted successfully",
+                data: property,
+            };
+        } catch (error: unknown) {
+            if (error instanceof HttpException) {
+                throw error;
+            }
+
+            if (error instanceof Error) {
+                throw new BadRequestException(error.message);
+            }
+
+            throw new BadRequestException(
+                "Unable to delete property",
+            );
+        }
+    }
 
 }

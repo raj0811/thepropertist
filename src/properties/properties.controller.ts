@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, DefaultValuePipe, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, DefaultValuePipe, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { PropertiesService } from './properties.service';
 import { AgentAuthGuard } from 'src/AuthGuard/agent.AuthGuard';
 import { ListingType, NearestStation, PropertyAddress, PropertyAgeType, PropertyBenefit } from 'src/database/schema/properties.schema';
@@ -277,4 +277,13 @@ export class PropertiesController {
         return this.propertiesService.getOnePropperty(propertyId);
     }
 
+
+    @Delete("delete/:propertyId")
+    @UseGuards(AgentAuthGuard)
+    deleteProperty(
+        @Param("propertyId") propertyId: string,
+        @Req() req: any
+    ) {
+        return this.propertiesService.deleteProperty(propertyId, req.user.id);
+    }
 }

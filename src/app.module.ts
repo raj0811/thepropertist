@@ -14,6 +14,7 @@ import { AgentService } from './agent/agent.service';
 import { PropertiesService } from './properties/properties.service';
 import { PropertiesModule } from './properties/properties.module';
 import { S3BucketModule } from './s3-bucket/s3-bucket.module';
+import { EnquiryModule } from './enquiry/enquiry.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -24,7 +25,8 @@ import { S3BucketModule } from './s3-bucket/s3-bucket.module';
     UserModule,
     AgentModule,
     PropertiesModule,
-    S3BucketModule],
+    S3BucketModule,
+    EnquiryModule],
   controllers: [AppController, UserController, AgentController],
   providers: [AppService, DatabaseService, UserService, AgentService, PropertiesService],
 })
